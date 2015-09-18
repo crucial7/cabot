@@ -35,6 +35,10 @@ CHECK_TYPES = (
     ('<', 'Less than'),
     ('<=', 'Less than or equal'),
     ('==', 'Equal to'),
+    ('>_avg', 'Greater than (avg)'),
+    ('>=_avg', 'Greater than or equal (avg)'),
+    ('<_avg', 'Less than (avg)'),
+    ('<=_avg', 'Less than or equal (avg)'),
 )
 
 def serialize_recent_results(recent_results):
@@ -622,6 +626,22 @@ class GraphiteStatusCheck(StatusCheck):
                     failed = float(self.value) in s['values']
                     if failed:
                         failure_value = float(self.value)
+                elif self.check_type == '<_avg':
+                    failed = float(s['average_value']) < float(self.value)
+                    if failed:
+                        failure_value = s['average_value']
+                elif self.check_type == '<=_avg':
+                    failed = float(s['average_value']) <= float(self.value)
+                    if failed:
+                        failure_value = s['average_value']
+                elif self.check_type == '>_avg':
+                    failed = float(s['average_value']) > float(self.value)
+                    if failed:
+                        failure_value = s['average_value']
+                elif self.check_type == '>=_avg':
+                    failed = float(s['average_value']) >= float(self.value)
+                    if failed:
+                        failure_value = s['average_value']
                 else:
                     raise Exception(u'Check type %s not supported' %
                                     self.check_type)

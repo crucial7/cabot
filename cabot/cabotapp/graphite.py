@@ -78,7 +78,7 @@ def parse_metric(metric, mins_to_check=5):
     all_values = []
     for target in data:
         series = {'values': [
-            float(t[0]) for t in target['datapoints'][-mins_to_check:] if t[0] is not None]}
+            float(t[0]) for t in target['datapoints'][mins_to_check:] if t[0] is not None]}
         all_values.extend(series['values'])
         if series['values']:
             ret['num_series_with_data'] += 1
